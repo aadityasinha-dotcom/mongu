@@ -68,6 +68,8 @@ app.put('/product/:id', async(req, res) => {
     }
 })
 
+// Create a product
+
 app.post('/product', async(req, res) => {
     try{
         const product = await Product.create(req.body)
@@ -77,6 +79,8 @@ app.post('/product', async(req, res) => {
         res.status(500).json({message: error.message})
     }
 })
+
+// Delete a product using ID
 
 app.delete('/product/:id', async(req, res) => {
     try{
