@@ -7,6 +7,18 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
+
+mongoose.set("strictQuery", false)
+mongoose.connect("mongodb+srv://aadityasinha009:LHcxRzHunZsvquLA@cluster0.fqusj3d.mongodb.net/Node-API?retryWrites=true&w=majority")
+.then(() => {
+    console.log("connect to mongodb")
+    app.listen(3000, ()=>{
+        console.log("running")
+    })
+}).catch(() => {
+    console.log(error)
+})
+
 // routes
 
 app.get('/', (req, res) => {
@@ -17,6 +29,8 @@ app.get('/blog', (req, res) => {
     res.send("Hello blog")
 })
 
+// Get all the products
+
 app.get('/products', async(req, res) => {
     try{
         const products = await Product.find({});
@@ -26,7 +40,9 @@ app.get('/products', async(req, res) => {
     }
 })
 
-app.get('/products/:id', async(req, res) => {
+// Search a product by ID
+
+app.get('/product/:id', async(req, res) => {
     try{
         const {id} = req.params;
         const products = await Product.findById(id);
@@ -36,7 +52,9 @@ app.get('/products/:id', async(req, res) => {
     }
 })
 
-app.put('/products/:id', async(req, res) => {
+// Update a product using ID
+
+app.put('/product/:id', async(req, res) => {
     try{
         const {id} = req.params;
         const product = await Product.findByIdAndUpdate(id, req.body);
@@ -60,7 +78,7 @@ app.post('/product', async(req, res) => {
     }
 })
 
-app.delete('/products/:id', async(req, res) => {
+app.delete('/product/:id', async(req, res) => {
     try{
         const {id} = req.params;
         const product = await Product.findByIdAndDelete(id, req.body);
@@ -73,13 +91,5 @@ app.delete('/products/:id', async(req, res) => {
     }
 })
 
-mongoose.set("strictQuery", false)
-mongoose.connect("mongodb+srv://aadityasinha009:LHcxRzHunZsvquLA@cluster0.fqusj3d.mongodb.net/Node-API?retryWrites=true&w=majority")
-.then(() => {
-    console.log("connect to mongodb")
-    app.listen(3000, ()=>{
-        console.log("running")
-    })
-}).catch(() => {
-    console.log(error)
-})
+
+module.exports = app; // Export the app instance
